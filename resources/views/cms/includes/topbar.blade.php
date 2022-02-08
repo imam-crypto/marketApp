@@ -413,7 +413,7 @@
                                         <a href="{{route('banner.index')}}"> Data Banner </a>
                                     </li>
                                     <li>
-                                        <a href="ui_typography.html"> Typography </a>
+                                        <a href="{{route('category.index')}}"> Data Category </a>
                                     </li>
                                     <li>
                                         <a href="ui_tabs_accordions_navs.html"> Tabs, Accordions & Navs </a>

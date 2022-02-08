@@ -84,7 +84,6 @@
 <script src="{{asset('template')}}/assets/global/plugins/js.cookie.min.js" type="text/javascript"></script>
 <script src="{{asset('template')}}/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
 <script src="{{asset('template')}}/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-<script src="{{asset('template')}}/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 {{-- Data tables --}}
 <script src="{{asset('template')}}/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -92,7 +91,6 @@
 <script src="{{asset('template')}}/plugins/datatables/datatables-demo.js"></script>
 
 {{-- end data tables --}}
-
 <script src="{{asset('template/plugins')}}/sweet/sweetalert2.all.min.js" type="text/javascript"></script>
 <script src="{{asset('template/plugins')}}/my.js" type="text/javascript"></script>
 <!-- BEGIN PAGE LEVEL PLUGINS -->
@@ -104,16 +102,20 @@
 <script src="{{asset('template')}}/assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
 <script src="{{asset('template')}}/assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
 <script src="{{asset('template')}}/assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
-<script src="{{asset('template')}}/assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js" type="text/javascript"></script>
-<script src="{{asset('template')}}/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js" type="text/javascript"></script>
-<script src="{{asset('template')}}/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
-<script src="{{asset('template')}}/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js" type="text/javascript"></script>
-<script src="{{asset('template')}}/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js" type="text/javascript"></script>
-<script src="{{asset('template')}}/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js" type="text/javascript"></script>
-<script src="{{asset('template')}}/assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN THEME GLOBAL SCRIPTS -->
+<script src="{{asset('template')}}/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="{{asset('template')}}/assets/pages/scripts/components-bootstrap-switch.min.js" type="text/javascript"></script>
+
 <script src="{{asset('template')}}/assets/global/scripts/app.min.js" type="text/javascript"></script>
+
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN THEME GLOBAL SCRIPTS -->
+<!-- END THEME GLOBAL SCRIPTS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+
+
+
 <!-- END THEME GLOBAL SCRIPTS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="{{asset('template')}}/assets/pages/scripts/ecommerce-dashboard.min.js" type="text/javascript"></script>
@@ -122,6 +124,14 @@
 <script src="{{asset('template')}}/assets/layouts/layout3/scripts/layout.min.js" type="text/javascript"></script>
 <script src="{{asset('template')}}/assets/layouts/layout3/scripts/demo.min.js" type="text/javascript"></script>
 <script src="{{asset('template')}}/assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
+<script>
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function() {
+            $(this).remove();
+        })
+    }, 4000);
+    
+</script>
 <!-- END THEME LAYOUT SCRIPTS -->
 @stack('before-script')
 @stack('after-script')

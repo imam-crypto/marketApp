@@ -70,50 +70,44 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        @php
+                            $no=1;
+                        @endphp
+                        @forelse ($data as $dt)
                         <tr>
                             <td>
-                               1
+                               {{$no++}}
                             </td>
-                            <td> tes </td>
-                            <td>
-                                tes
+                            <td> {{$dt->title}} </td>
+                            <td>{{$dt->slug}}</td>
+                            <td> {!!$dt->description!!}</td>
+                            <td class="center">
+                              @if ($dt->status == "active")
+                              
+                              <span class="badge badge-primary">Active</span>
+                              @else
+                              <span class="badge badge-warning">Inactive</span>
+                              @endif
+                               <span class="badge badge-primary"></span>
+                            </span>
                             </td>
+                            <td><img src="{{ url('storage/' . $dt->photo) }}" style="max-height: 90px; max-width: 120px;" alt="photo"></td>
                             <td>
-                                <span class="label label-sm label-warning">tes </span>
-                            </td>
-                            <td class="center"> tes</td>
-                            <td class="center"> tes</td>
-                            <td>
-                                <div class="btn-group">
-                                    <button class="btn btn-xs green dropdown-toggle" type="button"
-                                        data-toggle="dropdown" aria-expanded="false"> Actions
-                                        <i class="fa fa-angle-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class="icon-docs"></i> New Post </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class="icon-tag"></i> New Comment </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class="icon-user"></i> New User </a>
-                                        </li>
-                                        <li class="divider"> </li>
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class="icon-flag"></i> Comments
-                                                <span class="badge badge-success">4</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <a href="javascript:;" class="btn btn-xs green" onclick="edit({{$dt->id}})" >
+                                    <i class="icon-tag"></i> </a>
+                                    <form action="{{route('banner.destroy', $dt->id) }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <a href="javascript:;" data-id="{{$dt->id}}" class="del btn red btn-xs">
+                                            <i class="icon-trash"></i> </a>
+                                    </form>    
+                             
                             </td>
                         </tr>
+                        @empty
+                            
+                        @endforelse
+                    
                      
                     </tbody>
                 </table>
@@ -177,8 +171,72 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+
+        {{-- modal edit --}}
+        <div class="modal fade" id="modalEdit" tabindex="-1" role="basic" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">Form Edit  Banner</h4>
+                    </div>
+                    <div class="modal-body"> 
+                        <form role="form" method="POST" action="{{route('update')}}" enctype="multipart/form-data">
+                          @csrf    
+                         
+                          <input type="text" name="id" id="id">
+                                <div class="form-group form-md-line-input form-md-floating-label">
+                                    <input type="text" class="form-control @error('title')
+                                    is-invalid
+                                @enderror" id="title" name="title" value="{{old('title')}}">
+                                    <label for="form_control_1">Title</label>
+                                    @error('title')
+                                    <div class="div" class="text-muted">
+                                        {{$message}}
+                                    </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group form-md-line-input form-md-floating-label">
+                                    <input type="text" class="form-control" id="slug" name="slug">
+                                    <label for="form_control_1">Slug</label>
+                                </div>
+                             
+                                <div class="form-group form-md-line-input">
+                                    <textarea class="form-control" rows="3" name="description" id="descriptionEdit" placeholder="Description"></textarea>
+                                    <label for="form_control_1">Description</label>
+                                </div>
+                                <div class="form-group form-md-line-input">
+                                    <input type="file" class="form-control" name="photo">
+                                    <label for="form_control_1">Photo</label>
+                                    <a href="" target="_blank" id="photo"></a>
+                                </div>
+                                <div class="form-group form-md-line-input form-md-floating-label">
+                                    <select class="form-control edited" id="status" name="status">
+                                        <option value="">Select Status</option>
+                                        <option value="active" {{old('status') == 'active' ? 'selected' :'' }}>Active</option>
+                                        <option value="inactive" {{old('status') == 'inactive' ? 'selected' :'' }}>Inactive</option>
+                                    </select>
+                                    <label for="form_control_1">Status</label>
+                                </div>
+                               
+                            <div class="form-actions noborder">
+                                <button type="submit" class="btn blue">Submit</button>
+                            </div>
+                        </form>
+                    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        {{-- end modal edit --}}
     </div>
 </div>
+
 @endsection
 
 @push('after-script')
@@ -187,7 +245,66 @@
     @if (count($errors) > 0)
     $('#basic').modal('show');
 @endif
+function edit(id){
+    CKEDITOR.replace('descriptionEdit');
+    console.log(id);
+
+    $.ajax({
+
+url: "{{route('edit')}}?id=" + id,
+type: 'get',
+dataType: 'json',
+contentType: 'application/json',
+data: id,
+
+success: function(data) {
+    $('#id').val(data.id);
+    $('#title').val(data.title);
+    $('#descriptionEdit').val(data.description);
+    $('#slug').val(data.slug);
+    $('#photo').text(data.photo);
+    document.getElementById("photo").href = "{{url('storage/')}}" +"/"+ data.photo;
+    $('#status').val(data.status);
+},
+
+});
+$('#modalEdit').modal('show');
+}
+
 </script>
 
+<script>
+   $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+    $('.del').click(function(e){
+        var form = $(this).closest('form');
+        var id = $(this).data('id');
+        e.preventDefault();
+        Swal.fire({
+        title: "Anda yakin?",
+        text: "data di hapus!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Hapus!",
+    }).then((result) => {
+        if (result.value == true) {
+            form.submit();
+        Swal.fire({
+
+        icon: "success",
+        title: "data berhasil di hapus ",
+        showConfirmButton: false,
+        timer: 1500,
+        });
+        }
+     
+     });
+    })
+</script>
 
 @endpush
